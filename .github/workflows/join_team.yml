@@ -23,11 +23,46 @@ jobs:
       - name: Validate handle
         run: |
           if [[ ! "$HANDLE" =~ ^[A-Za-z0-9]([A-Za-z0-9-]{0,38})$ ]]; then
-            echo "Invalid GitHub handle: $HANDLE" >&2
+            echo "::error title=Invalid handle::'$HANDLE' is not a valid GitHub handle"
+            {
+              echo "## ❌ Join team failed"
+              echo "'$HANDLE' is not a valid GitHub handle."
+            } >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
 
       - name: Add user to team
         run: |
-          gh api -X PUT "orgs/$ORG/teams/$TEAM_SLUG/memberships/$HANDLE" -f role=member \
-            --jq '"State for \(.url): \(.state)"' | tee -a "$GITHUB_STEP_SUMMARY"
+          if ! result=$(gh api -X PUT "orgs/$ORG/teams/$TEAM_SLUG/memberships/$HANDLE" \
+            -f role=member --jq '.state' 2>&1); then
+            echo "::error title=Join team failed::$result"
+            {
+              echo "## ❌ Join team failed"
+              echo "Could not add **$HANDLE** to **$ORG/$TEAM_SLUG**."
+              echo
+              echo '```'
+              echo "$result"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          if [[ "$result" == "pending" ]]; then
+            msg="Invitation sent. **$HANDLE** must accept it (check email or https://github.com/orgs/$ORG/invitation)."
+            echo "::notice title=Invitation sent::$HANDLE has a pending invitation to $ORG/$TEAM_SLUG"
+            icon="📨"
+          else
+            msg="**$HANDLE** is now an active member of **$ORG/$TEAM_SLUG**."
+            echo "::notice title=Added to team::$HANDLE is now a member of $ORG/$TEAM_SLUG"
+            icon="✅"
+          fi
+
+          {
+            echo "## $icon Join team"
+            echo
+            echo "$msg"
+            echo
+            echo "| Handle | Organization | Team | State |"
+            echo "| --- | --- | --- | --- |"
+            echo "| $HANDLE | $ORG | $TEAM_SLUG | $result |"
+          } >> "$GITHUB_STEP_SUMMARY"
