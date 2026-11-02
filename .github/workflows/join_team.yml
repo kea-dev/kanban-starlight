@@ -48,8 +48,8 @@ jobs:
           fi
 
           if [[ "$result" == "pending" ]]; then
-            msg="Invitation sent. **$HANDLE** must accept it (check email or https://github.com/orgs/$ORG/invitation)."
-            echo "::notice title=Invitation sent::$HANDLE has a pending invitation to $ORG/$TEAM_SLUG"
+            msg="Invitation sent. **$HANDLE**, go to https://github.com/settings/organizations and accept the invitation to **$ORG**."
+            echo "::notice title=Invitation sent::$HANDLE: go to https://github.com/settings/organizations and accept the invitation to $ORG"
             icon="📨"
           else
             msg="**$HANDLE** is now an active member of **$ORG/$TEAM_SLUG**."
