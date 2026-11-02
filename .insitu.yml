@@ -114,3 +114,4 @@ waves:
     checks:
       - "fix-markdown"
       - "fix-prettier"
+      - "cspell"
