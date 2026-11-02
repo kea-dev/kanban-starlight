@@ -1,0 +1,21 @@
+{
+  "name": "astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "dev:draft": "astro dev --mode drafts",
+    "build:draft": "astro build --mode drafts",
+    "check:astro": "astro check",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/starlight": "^0.42.8",
+    "astro": "^7.2.10",
+    "sharp": "^0.35.3",
+    "typescript": "^6.0.3"
+  }
+}
