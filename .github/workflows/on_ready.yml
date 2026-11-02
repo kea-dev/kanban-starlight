@@ -24,12 +24,47 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: astro/package-lock.json
+
+      - name: Install dependencies
+        run: npm run install:astro
+
       - name: Set up and verify runner environment
         uses: ./.github/actions/prep-runner
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           verify: gh insitu run trunk-worthy
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
+      - name: Write version.txt
+        run: npm run write-version
+        env:
+          BUILD_REPO: ${{ github.repository }}
+          BUILD_REF: ${{ github.ref_name }}
+          BUILD_SHA: ${{ github.sha }}
+
+      - name: Build with Astro
+        run: npm run build -- --site "${{ steps.pages.outputs.origin }}" --base "${{ steps.pages.outputs.base_path }}"
+
+      - name: Disable Jekyll processing in deployed github-pages artifact
+        run: npm run write-nojekyll
+      - name: Upload build artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: github-pages-${{ github.sha }}
+          path: astro/dist
+          retention-days: 3
+          include-hidden-files: true
 
   merge-to-trunk:
     name: Merge to trunk

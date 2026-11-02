@@ -48,6 +48,11 @@ inventory:
     name: Run prettier
     command: prettier --check .
 
+  - id: astro-install
+    name: "Install Astro dependencies"
+    command: |
+      npm run install:astro
+
   - id: "install-npm-tools"
     name: "Install linting and checker tools"
     command: |
@@ -83,6 +88,7 @@ waves:
       - install-takt-shortcuts
       - safe-repo
       - repo-gitconfig
+      - astro-install
 
   - id: "prep-runner"
     name: "Run to prepare GitHub runner"
@@ -92,6 +98,7 @@ waves:
       - install-gh-insitu
       - repo-gitconfig
       - install-npm-tools
+      - astro-install
 
   - id: trunk-worthy
     name: Minimum quality checks before commit
