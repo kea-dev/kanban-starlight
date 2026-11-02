@@ -1,0 +1,33 @@
+name: Join team
+
+on:
+  workflow_dispatch:
+    inputs:
+      github_handle:
+        description: "GitHub handle to add to the team"
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  join-team:
+    name: Add ${{ inputs.github_handle }} to ek-2026
+    runs-on: ubuntu-latest
+    env:
+      ORG: kea-dev
+      TEAM_SLUG: ek-2026
+      HANDLE: ${{ inputs.github_handle }}
+      GH_TOKEN: ${{ secrets.ORG_TEAM_ADMIN }} # needs admin:org (classic) or org Members: write
+    steps:
+      - name: Validate handle
+        run: |
+          if [[ ! "$HANDLE" =~ ^[A-Za-z0-9]([A-Za-z0-9-]{0,38})$ ]]; then
+            echo "Invalid GitHub handle: $HANDLE" >&2
+            exit 1
+          fi
+
+      - name: Add user to team
+        run: |
+          gh api -X PUT "orgs/$ORG/teams/$TEAM_SLUG/memberships/$HANDLE" -f role=member \
+            --jq '"State for \(.url): \(.state)"' | tee -a "$GITHUB_STEP_SUMMARY"
