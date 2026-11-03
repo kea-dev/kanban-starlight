@@ -47,3 +47,13 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
+
+## Base path rule
+
+The site is served under `base` (see `astro.config.mjs`). Never write root-relative links such as `/guides/example/` in content:
+
+- Markdown/MDX body: use relative links (`../reference/example/`).
+- Components/Astro files: prefix with `import.meta.env.BASE_URL`.
+- `index.mdx` hero actions: frontmatter can't be base-aware, so the link carries the prefix (`/kanban-starlight/...`); update it if `base` changes.
+
+`npm run check:links` (run after a build) fails on built internal links lacking the base.

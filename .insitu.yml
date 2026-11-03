@@ -48,6 +48,14 @@ inventory:
     name: Run prettier
     command: prettier --check .
 
+  - id: astro-build
+    name: Build the Astro site
+    command: npm run build
+
+  - id: check-links
+    name: Check internal links include the base path
+    command: npm run check:links
+
   - id: astro-install
     name: "Install Astro dependencies"
     command: |
@@ -107,6 +115,12 @@ waves:
       - cspell
       - markdownlint
       - prettier
+      - astro-build
+
+  - id: check-links
+    name: Check links in the built Astro site
+    checks:
+      - check-links
 
   - id: "fix-all"
     name: "Fix anything that can be fixed automatically"

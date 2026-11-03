@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-gh insitu run trunk-worthy
+gh insitu run trunk-worthy check-links

@@ -8,7 +8,8 @@ hero:
     file: ../../assets/houston.webp
   actions:
     - text: Example Guide
-      link: /guides/example/
+      # Frontmatter is not base-aware: keep this prefix in sync with `base` in astro.config.mjs
+      link: /kanban-starlight/guides/example/
       icon: right-arrow
     - text: Read the Starlight docs
       link: https://starlight.astro.build

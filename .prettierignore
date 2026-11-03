@@ -1,1 +1,3 @@
 tmp/**
+astro/dist/**
+astro/.astro/**
