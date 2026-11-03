@@ -55,6 +55,11 @@ jobs:
       - name: Build with Astro
         run: npm run build -- --site "${{ steps.pages.outputs.origin }}" --base "${{ steps.pages.outputs.base_path }}"
 
+      - name: Check internal links include base
+        run: npm run check:links
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
       - name: Disable Jekyll processing in deployed github-pages artifact
         run: npm run write-nojekyll
       - name: Upload build artifact

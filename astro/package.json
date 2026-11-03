@@ -8,6 +8,7 @@
     "dev:draft": "astro dev --mode drafts",
     "build:draft": "astro build --mode drafts",
     "check:astro": "astro check",
+    "check:links": "node scripts/check-base-links.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

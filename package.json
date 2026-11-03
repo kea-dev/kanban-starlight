@@ -11,6 +11,7 @@
     "install:astro": "npm --prefix astro install",
     "install:repo": "npm install",
     "check:astro": "cd astro && npm run check:astro",
+    "check:links": "cd astro && npm run check:links",
     "write-version": "printf 'Build from %s\\nRef: %s\\nCommit: %s\\n' \"${BUILD_REPO:-$(git remote get-url origin)}\" \"${BUILD_REF:-$(git branch --show-current)}\" \"${BUILD_SHA:-$(git rev-parse HEAD)}\" > astro/public/version.txt",
     "write-nojekyll": "echo \"De-jekyll-ify this static package\" > astro/dist/.nojekyll"
   }
